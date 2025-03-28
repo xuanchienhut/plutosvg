@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.28)
 
 set(PLUTOSVG_VERSION_MAJOR 0)
 set(PLUTOSVG_VERSION_MINOR 0)
@@ -6,9 +6,18 @@ set(PLUTOSVG_VERSION_MICRO 6)
 
 project(plutosvg LANGUAGES C VERSION ${PLUTOSVG_VERSION_MAJOR}.${PLUTOSVG_VERSION_MINOR}.${PLUTOSVG_VERSION_MICRO})
 
-find_package(plutovg 0.0.4 QUIET)
+option(PLUTOVG_VERSION_REQUIRE "Require" OFF)
+
+if(PLUTOVG_VERSION_REQUIRE)
+    set(PLUTOVG_VERSION 0.0.4)
+    find_package(plutovg ${PLUTOVG_VERSION} QUIET)
+else()
+    find_package(plutovg QUIET)
+endif()
+
 if(NOT plutovg_FOUND)
-    add_subdirectory(plutovg)
+    # add_subdirectory(plutovg)
+    message(FATAL_ERROR "plutovg NOT FOUND, checkout at https://github.com/sammycage/plutovg.git or your fork")
 endif()
 
 set(plutosvg_sources
